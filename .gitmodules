@@ -1,0 +1,9 @@
+[submodule "droidcontroller"]
+	path = droidcontroller
+	url = https://github.com/Cougar/droidcontroller
+[submodule "pylansen"]
+	path = pylansen
+	url = https://github.com/droid4control/pylansen
+[submodule "python-mbus"]
+	path = python-mbus
+	url = https://github.com/Cougar/python-mbus
