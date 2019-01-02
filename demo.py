@@ -51,6 +51,8 @@ class MBusSerial(object):
         self._get_next_id = itertools.cycle(ids).__next__
         self._ioloop = tornado.ioloop.IOLoop.current()
         self._executor = ThreadPoolExecutor(max_workers=1)
+        self._mbus = MBus(device=self._port, libpath='./libmbus.so')
+        self._mbus.connect()
         self._ioloop.add_callback(self._read_mbus)
 
     def _read_mbus(self):
@@ -58,8 +60,6 @@ class MBusSerial(object):
 
     def _runner(self):
         id = self._get_next_id()
-        self._mbus = MBus(device=self._port, libpath='./libmbus.so')
-        self._mbus.connect()
         self._mbus.select_secondary_address(id)
         self._mbus.send_request_frame(MBUS_ADDRESS_NETWORK_LAYER)
         reply = self._mbus.recv_frame()
