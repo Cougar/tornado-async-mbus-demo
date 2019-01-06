@@ -4,6 +4,8 @@
 import sys
 import time
 
+import binascii
+
 import itertools
 
 from concurrent.futures import ThreadPoolExecutor
@@ -69,6 +71,10 @@ class LansenSerial(object):
 
     def _wmbus_msg_received(self, timestamp, enapi):
         if isinstance(enapi, ENAPIMbusData):
+            try:
+                log.error("unknown data at the end of frame: %s", binascii.hexlify(enapi._unknown_data))
+            except Exception as ex:
+                pass
             xml = self._lmbus.getxml(enapi.MbusData)
             self._ioloop.add_callback(self._msgbus.publish, 'lansen_data_received', {'port': self._port, 'timestamp': timestamp, 'rssi': enapi.RSSI, 'xml': xml})
 
